@@ -1,6 +1,6 @@
 package com.example.newsapp.Retrofit;
 
-import com.example.newsapp.Utils;
+import com.example.newsapp.Utils.Constant;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -18,7 +18,7 @@ public class RetrofitApi {
     }
     private  RetrofitApi(){
         httpClient = new OkHttpClient.Builder();
-        newsApi = create(Utils.BASE_URL,NewsApi.class);
+        newsApi = create(Constant.BASE_URL,NewsApi.class);
     }
 
     public NewsApi getNewsApi(){

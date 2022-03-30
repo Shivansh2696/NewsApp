@@ -1,6 +1,6 @@
-package com.example.newsapp;
+package com.example.newsapp.Utils;
 
-public class Utils {
+public class Constant {
 
     public static final String BASE_URL = "https://newsapi.org/v2/";
     public static final String KEY = "5e93f391bf3a407d9076d8fd080cd70b";

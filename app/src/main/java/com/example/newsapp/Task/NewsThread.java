@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.newsapp.Model.Category.CategoryResponse;
 import com.example.newsapp.Retrofit.RetrofitApi;
-import com.example.newsapp.Utils;
+import com.example.newsapp.Utils.Constant;
 
 import java.io.IOException;
 
@@ -25,13 +25,13 @@ public class NewsThread implements Runnable {
         try {
             Response<CategoryResponse> categoryResponse;
             if (everything){
-                categoryResponse = RetrofitApi.getInstance().getNewsApi().getEverything(category, Utils.KEY).execute();
+                categoryResponse = RetrofitApi.getInstance().getNewsApi().getEverything(category, Constant.KEY).execute();
             }else
             if(category.equals("Top Headline")) {
-                categoryResponse = RetrofitApi.getInstance().getNewsApi().getTopHeadlinesWithCountry("in", Utils.KEY).execute();
+                categoryResponse = RetrofitApi.getInstance().getNewsApi().getTopHeadlinesWithCountry("in", Constant.KEY).execute();
             }
             else {
-                categoryResponse = RetrofitApi.getInstance().getNewsApi().getCategoryResponse("in",category,Utils.KEY).execute();
+                categoryResponse = RetrofitApi.getInstance().getNewsApi().getCategoryResponse("in",category, Constant.KEY).execute();
             }
 
             if (categoryResponse.isSuccessful())

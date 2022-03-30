@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.newsapp.Fragments.News.NewsFragment;
@@ -64,12 +65,14 @@ public class MainActivity extends AppCompatActivity  {
     @Override
     public void onBackPressed() {
         int backCount = getSupportFragmentManager().getBackStackEntryCount();
-        if(backCount > 0){
-            getSupportFragmentManager().popBackStack();
+        if (backCount>0) {
+            backCount = backCount - 1;
+            FragmentManager.BackStackEntry entry=getSupportFragmentManager().getBackStackEntryAt(backCount);
+            if (entry.getName().contains("TabsFragment"))
+                finish();
+            else getSupportFragmentManager().popBackStack();
         }
-        else {
-            super.onBackPressed();
-        }
+        else super.onBackPressed();
     }
     private void replaceFrame(Fragment fragment){
         getSupportFragmentManager()
