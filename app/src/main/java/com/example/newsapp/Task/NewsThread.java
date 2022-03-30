@@ -14,14 +14,19 @@ public class NewsThread implements Runnable {
 
     private String category;
     private MutableLiveData<CategoryResponse> liveData;
+    private boolean everything;
     public NewsThread(String category, MutableLiveData<CategoryResponse> liveData) {
         this.category = category;
         this.liveData = liveData;
     }
+
     @Override
     public void run() {
         try {
             Response<CategoryResponse> categoryResponse;
+            if (everything){
+                categoryResponse = RetrofitApi.getInstance().getNewsApi().getEverything(category, Utils.KEY).execute();
+            }else
             if(category.equals("Top Headline")) {
                 categoryResponse = RetrofitApi.getInstance().getNewsApi().getTopHeadlinesWithCountry("in", Utils.KEY).execute();
             }
@@ -35,5 +40,10 @@ public class NewsThread implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public NewsThread setEverything(boolean everything) {
+        this.everything = everything;
+        return this;
     }
 }

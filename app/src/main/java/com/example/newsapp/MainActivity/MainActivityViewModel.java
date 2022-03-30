@@ -1,5 +1,7 @@
 package com.example.newsapp.MainActivity;
 
+import android.os.Bundle;
+
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;
 
@@ -30,7 +32,9 @@ public class MainActivityViewModel extends ViewModel {
     private void init(){
         for (String s : category) {
             NewsFragment fragment = new NewsFragment();
-            fragment.setCategory(s);
+            Bundle bundle=new Bundle();
+            bundle.putString("category",s);
+            fragment.setArguments(bundle);
             fragments.put(s,fragment);
         }
     }

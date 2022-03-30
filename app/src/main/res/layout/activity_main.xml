@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/mainLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -11,17 +11,28 @@
         android:orientation="vertical">
 
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/NewsTabs"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            app:tabMode="scrollable"/>
+            android:orientation="vertical"
+            android:id="@+id/pagerLayout"
+            android:layout_height="match_parent">
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/NewsTabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                app:tabMode="scrollable"/>
 
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/ViewPager"
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/ViewPager"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/NewsTabs" />
+        </LinearLayout>
+        <androidx.fragment.app.FragmentContainerView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/NewsTabs" />
-    </LinearLayout>
+            android:id="@+id/mainFrame"
+            android:visibility="gone"
+            android:layout_height="match_parent"/>
+    </RelativeLayout>
 </layout>

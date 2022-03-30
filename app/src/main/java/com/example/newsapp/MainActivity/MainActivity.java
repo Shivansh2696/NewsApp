@@ -3,14 +3,15 @@ package com.example.newsapp.MainActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.newsapp.Fragments.EverythingNews.EveryThingFragment;
-import com.example.newsapp.Fragments.EverythingNews.SharedViewModel;
+import com.example.newsapp.Fragments.News.NewsFragment;
+import com.example.newsapp.Fragments.News.SharedViewModel;
 import com.example.newsapp.R;
 import com.example.newsapp.ViewPagerAdapter;
 import com.example.newsapp.databinding.ActivityMainBinding;
@@ -19,9 +20,9 @@ import com.google.android.material.tabs.TabLayoutMediator;
 public class MainActivity extends AppCompatActivity  {
     private ActivityMainBinding binding;
     private ViewPagerAdapter VPAdapter;
-    private EveryThingFragment everythingfragment;
     private SharedViewModel sharedViewModel;
     private MainActivityViewModel viewModel;
+    private NewsFragment everythingNewsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,9 +30,13 @@ public class MainActivity extends AppCompatActivity  {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
         viewModel=new ViewModelProvider(this).get(MainActivityViewModel.class);
-        everythingfragment = new EveryThingFragment();
-
+        everythingNewsFragment=new NewsFragment();
         VPAdapter = new ViewPagerAdapter(getSupportFragmentManager(),getLifecycle());
+
+        Bundle bundle=new Bundle();
+        bundle.putBoolean("everything",true);
+        everythingNewsFragment.setArguments(bundle);
+
         binding.ViewPager.setAdapter(VPAdapter);
 
         VPAdapter.setItems(viewModel.getFragments());
@@ -54,9 +59,10 @@ public class MainActivity extends AppCompatActivity  {
                     sharedViewModel.setQuery(query);
                     getSupportFragmentManager()
                             .beginTransaction()
-                            .replace(R.id.mainLayout,everythingfragment)
-                            .addToBackStack(everythingfragment.getClass().getName())
+                            .replace(R.id.mainFrame,everythingNewsFragment)
+                            .addToBackStack(everythingNewsFragment.getClass().getName())
                             .commit();
+                    setPagerLayoutVisibility(false);
                 }
                 return true;
             }
@@ -73,9 +79,15 @@ public class MainActivity extends AppCompatActivity  {
         int backCount = getSupportFragmentManager().getBackStackEntryCount();
         if(backCount > 0){
             getSupportFragmentManager().popBackStack();
+            setPagerLayoutVisibility(true);
         }
         else {
             super.onBackPressed();
         }
+    }
+
+    private void setPagerLayoutVisibility(boolean visibility){
+        binding.pagerLayout.setVisibility(visibility? View.VISIBLE:View.GONE);
+        binding.mainFrame.setVisibility(!visibility?View.VISIBLE:View.GONE);
     }
 }
