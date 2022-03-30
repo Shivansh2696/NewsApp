@@ -1,4 +1,4 @@
-package com.example.newsapp.MainActivity;
+package com.example.newsapp.Fragments.Tabs;
 
 import android.os.Bundle;
 
@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public class MainActivityViewModel extends ViewModel {
+public class TabsViewModel extends ViewModel {
     private List<String> category= Arrays.asList(
             "Top Headline",
             "Business",
@@ -24,7 +24,7 @@ public class MainActivityViewModel extends ViewModel {
     );
     private LinkedHashMap<String,Fragment> fragments;
 
-    public MainActivityViewModel() {
+    public TabsViewModel() {
         fragments=new LinkedHashMap<>();
         init();
     }

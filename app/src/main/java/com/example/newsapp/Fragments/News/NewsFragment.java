@@ -23,7 +23,6 @@ public class NewsFragment extends Fragment {
     private SharedViewModel sharedViewModel;
     private RecyclerView NewsRecyclerView;
     private NewsAdapter newsAdapter;
-    private LinearLayoutManager linearLayoutManager;
     private String category;
     private boolean everything;
 
@@ -36,26 +35,22 @@ public class NewsFragment extends Fragment {
         viewModel = new ViewModelProvider(this,new NewsViewModelFactory(category)).get(NewsFragmentViewModel.class);
         else
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
-
-        linearLayoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         NewsFragmentBinding binding = DataBindingUtil.inflate(inflater, R.layout.news_fragment, container, false);
         NewsRecyclerView = binding.NewsRecyclerView;
-
+        newsAdapter = new NewsAdapter(getContext());
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        NewsRecyclerView.setLayoutManager(linearLayoutManager);
+        NewsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
         NewsRecyclerView.setHasFixedSize(true);
 
-        newsAdapter = new NewsAdapter(getContext());
         NewsRecyclerView.setAdapter(newsAdapter);
 
         if (!everything)

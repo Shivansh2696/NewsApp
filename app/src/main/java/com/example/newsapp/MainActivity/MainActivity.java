@@ -3,47 +3,38 @@ package com.example.newsapp.MainActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
-import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.newsapp.Fragments.News.NewsFragment;
 import com.example.newsapp.Fragments.News.SharedViewModel;
+import com.example.newsapp.Fragments.Tabs.TabsFragment;
+import com.example.newsapp.Fragments.Tabs.TabsViewModel;
 import com.example.newsapp.R;
-import com.example.newsapp.ViewPagerAdapter;
 import com.example.newsapp.databinding.ActivityMainBinding;
-import com.google.android.material.tabs.TabLayoutMediator;
 
 public class MainActivity extends AppCompatActivity  {
     private ActivityMainBinding binding;
-    private ViewPagerAdapter VPAdapter;
-    private SharedViewModel sharedViewModel;
-    private MainActivityViewModel viewModel;
-    private NewsFragment everythingNewsFragment;
 
+    private SharedViewModel sharedViewModel;
+    private NewsFragment everythingNewsFragment;
+    private TabsFragment tabsFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
-        viewModel=new ViewModelProvider(this).get(MainActivityViewModel.class);
-        everythingNewsFragment=new NewsFragment();
-        VPAdapter = new ViewPagerAdapter(getSupportFragmentManager(),getLifecycle());
 
+        everythingNewsFragment=new NewsFragment();
+        tabsFragment=new TabsFragment();
         Bundle bundle=new Bundle();
         bundle.putBoolean("everything",true);
         everythingNewsFragment.setArguments(bundle);
-
-        binding.ViewPager.setAdapter(VPAdapter);
-
-        VPAdapter.setItems(viewModel.getFragments());
-        new TabLayoutMediator(binding.NewsTabs, binding.ViewPager, (tab, position) -> {
-            tab.setText(VPAdapter.getFragmentTitle().get(position));
-        }).attach();
-
+        replaceFrame(tabsFragment);
     }
 
     @Override
@@ -57,12 +48,8 @@ public class MainActivity extends AppCompatActivity  {
             public boolean onQueryTextSubmit(String query) {
                 if(query.length() > 1) {
                     sharedViewModel.setQuery(query);
-                    getSupportFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.mainFrame,everythingNewsFragment)
-                            .addToBackStack(everythingNewsFragment.getClass().getName())
-                            .commit();
-                    setPagerLayoutVisibility(false);
+                    replaceFrame(everythingNewsFragment);
+                    searchView.clearFocus();
                 }
                 return true;
             }
@@ -79,15 +66,17 @@ public class MainActivity extends AppCompatActivity  {
         int backCount = getSupportFragmentManager().getBackStackEntryCount();
         if(backCount > 0){
             getSupportFragmentManager().popBackStack();
-            setPagerLayoutVisibility(true);
         }
         else {
             super.onBackPressed();
         }
     }
+    private void replaceFrame(Fragment fragment){
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(binding.mainFrame.getId(),fragment)
+                .addToBackStack(fragment.getClass().getName())
+                .commit();
 
-    private void setPagerLayoutVisibility(boolean visibility){
-        binding.pagerLayout.setVisibility(visibility? View.VISIBLE:View.GONE);
-        binding.mainFrame.setVisibility(!visibility?View.VISIBLE:View.GONE);
     }
 }
