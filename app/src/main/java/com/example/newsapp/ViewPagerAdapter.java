@@ -1,33 +1,33 @@
 package com.example.newsapp;
 
-import android.os.Bundle;
-
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.lifecycle.Lifecycle;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class ViewPagerAdapter extends FragmentPagerAdapter {
-    private final ArrayList<Fragment> fragmentArrayList = new ArrayList<>();
-    private final ArrayList<String> fragmentTitle = new ArrayList<>();
+public class ViewPagerAdapter extends FragmentStateAdapter {
+    private List<Fragment> fragmentArrayList;
+    private List<String> fragmentTitle;
 
-
-    public ViewPagerAdapter(@NonNull FragmentManager fm, int behavior) {
-        super(fm, behavior);
-
+    public ViewPagerAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle) {
+        super(fragmentManager, lifecycle);
+        this.fragmentArrayList=new ArrayList<>();
+        this.fragmentTitle=new ArrayList<>();
     }
 
     @NonNull
     @Override
-    public Fragment getItem(int position) {
+    public Fragment createFragment(int position) {
         return fragmentArrayList.get(position);
     }
 
     @Override
-    public int getCount() {
+    public int getItemCount() {
         return fragmentArrayList.size();
     }
 
@@ -36,9 +36,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         fragmentTitle.add(title);
     }
 
-    @Nullable
-    @Override
-    public CharSequence getPageTitle(int position) {
-        return fragmentTitle.get(position);
+    public List<String> getFragmentTitle() {
+        return fragmentTitle;
     }
 }

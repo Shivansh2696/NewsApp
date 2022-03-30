@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.databinding.DataBindingUtil;
@@ -14,6 +15,8 @@ import com.example.newsapp.Fragments.EverythingNews.EveryThingFragment;
 import com.example.newsapp.Fragments.EverythingNews.SharedViewModel;
 import com.example.newsapp.Fragments.News.NewsFragment;
 import com.example.newsapp.databinding.ActivityMainBinding;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +35,6 @@ public class MainActivity extends AppCompatActivity  {
         sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
         everythingfragment = new EveryThingFragment();
         searchBundle=new Bundle();
-        binding.NewsTabs.setupWithViewPager(binding.ViewPager);
         category.add("Top Headline");
         category.add("Business");
         category.add("Entertainment");
@@ -43,7 +45,7 @@ public class MainActivity extends AppCompatActivity  {
         category.add("Technology");
 
         // ViewPager Adapter Things
-        VPAdapter = new ViewPagerAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+        VPAdapter = new ViewPagerAdapter(getSupportFragmentManager(),getLifecycle());
 
 
         for (String s : category) {
@@ -52,6 +54,10 @@ public class MainActivity extends AppCompatActivity  {
             VPAdapter.addFragment(fragment, s);
         }
         binding.ViewPager.setAdapter(VPAdapter);
+        new TabLayoutMediator(binding.NewsTabs, binding.ViewPager, (tab, position) -> {
+            tab.setText(VPAdapter.getFragmentTitle().get(position));
+        }).attach();
+
     }
 
     @Override

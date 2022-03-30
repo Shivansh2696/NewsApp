@@ -9,7 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitApi {
     private static RetrofitApi instance;
     private OkHttpClient.Builder httpClient;
-    private NewsApi newsApi;
+    private final NewsApi newsApi;
 
     public static RetrofitApi getInstance(){
         if(instance == null)
