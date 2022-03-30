@@ -8,7 +8,10 @@ import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 
 public class ViewPagerAdapter extends FragmentStateAdapter {
     private List<Fragment> fragmentArrayList;
@@ -31,9 +34,15 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
         return fragmentArrayList.size();
     }
 
-    public void addFragment(Fragment fragment,String title){
-        fragmentArrayList.add(fragment);
-        fragmentTitle.add(title);
+    public void setItems(LinkedHashMap<String,Fragment> map){
+        if (map!=null){
+            for (Map.Entry<String, Fragment> entry : map.entrySet()) {
+                String title=entry.getKey();
+                Fragment fragment=entry.getValue();
+                fragmentArrayList.add(fragment);
+                fragmentTitle.add(title);
+            }
+        }
     }
 
     public List<String> getFragmentTitle() {

@@ -1,59 +1,40 @@
-package com.example.newsapp;
+package com.example.newsapp.MainActivity;
 
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.newsapp.Fragments.EverythingNews.EveryThingFragment;
 import com.example.newsapp.Fragments.EverythingNews.SharedViewModel;
-import com.example.newsapp.Fragments.News.NewsFragment;
+import com.example.newsapp.R;
+import com.example.newsapp.ViewPagerAdapter;
 import com.example.newsapp.databinding.ActivityMainBinding;
-import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity  {
     private ActivityMainBinding binding;
     private ViewPagerAdapter VPAdapter;
     private EveryThingFragment everythingfragment;
     private SharedViewModel sharedViewModel;
-    private Bundle searchBundle;
-    private List<String> category = new ArrayList<>();
+    private MainActivityViewModel viewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this,R.layout.activity_main);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
+        viewModel=new ViewModelProvider(this).get(MainActivityViewModel.class);
         everythingfragment = new EveryThingFragment();
-        searchBundle=new Bundle();
-        category.add("Top Headline");
-        category.add("Business");
-        category.add("Entertainment");
-        category.add("General");
-        category.add("Health");
-        category.add("Science");
-        category.add("Sports");
-        category.add("Technology");
 
-        // ViewPager Adapter Things
         VPAdapter = new ViewPagerAdapter(getSupportFragmentManager(),getLifecycle());
-
-
-        for (String s : category) {
-            NewsFragment fragment = new NewsFragment();
-            fragment.setCategory(s);
-            VPAdapter.addFragment(fragment, s);
-        }
         binding.ViewPager.setAdapter(VPAdapter);
+
+        VPAdapter.setItems(viewModel.getFragments());
         new TabLayoutMediator(binding.NewsTabs, binding.ViewPager, (tab, position) -> {
             tab.setText(VPAdapter.getFragmentTitle().get(position));
         }).attach();

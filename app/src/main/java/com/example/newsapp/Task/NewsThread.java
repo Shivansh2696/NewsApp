@@ -8,6 +8,8 @@ import com.example.newsapp.Utils;
 
 import java.io.IOException;
 
+import retrofit2.Response;
+
 public class NewsThread implements Runnable {
 
     private String category;
@@ -19,14 +21,17 @@ public class NewsThread implements Runnable {
     @Override
     public void run() {
         try {
-            CategoryResponse categoryResponse;
+            Response<CategoryResponse> categoryResponse;
             if(category.equals("Top Headline")) {
-                categoryResponse = RetrofitApi.getInstance().getNewsApi().getTopHeadlinesWithCountry("in", Utils.KEY).execute().body();
+                categoryResponse = RetrofitApi.getInstance().getNewsApi().getTopHeadlinesWithCountry("in", Utils.KEY).execute();
             }
             else {
-                categoryResponse = RetrofitApi.getInstance().getNewsApi().getCategoryResponse("in",category,Utils.KEY).execute().body();
+                categoryResponse = RetrofitApi.getInstance().getNewsApi().getCategoryResponse("in",category,Utils.KEY).execute();
             }
-            liveData.postValue(categoryResponse);
+
+            if (categoryResponse.isSuccessful())
+                liveData.postValue(categoryResponse.body());
+            else System.out.println(categoryResponse.errorBody().string());
         } catch (IOException e) {
             e.printStackTrace();
         }

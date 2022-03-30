@@ -47,7 +47,12 @@ public class EveryThingFragment extends Fragment {
         everythingRecyclerView.setLayoutManager(layoutManager);
         everythingRecyclerView.setHasFixedSize(true);
         everythingRecyclerView.setAdapter(adapter);
-        viewModel.getEverythingResponseLiveData().observe(getViewLifecycleOwner(),
-                categoryResponse -> adapter.setResponse(categoryResponse.getArticles()));
+        viewModel.getEverythingResponseLiveData().observe
+                (getViewLifecycleOwner(),
+                categoryResponse -> {
+                    if (categoryResponse != null) {
+                        adapter.setResponse(categoryResponse.getArticles());
+                    }
+                });
     }
 }
